@@ -1,6 +1,7 @@
 package com.uber.lastmile;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
@@ -10,11 +11,31 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.StringRequest;
+import com.uber.lastmile.utils.SharedPrefManager;
+import com.uber.lastmile.utils.VolleySingleton;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.uber.lastmile.constants.constants.LOGIN_URL;
+import static com.uber.lastmile.constants.constants.SIGNUP_URL;
+
 public class SignupActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
+    private int mStatusCode;
 
     @BindView(R.id.input_name) EditText _nameText;
     @BindView(R.id.input_email) EditText _emailText;
@@ -65,17 +86,76 @@ public class SignupActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own signup logic here.
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("username", email);
+            jsonBody.put("password", password);
+            final String requestBody = jsonBody.toString();
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, SIGNUP_URL,
+                    new Response.Listener<String>() {
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
+                        @Override
+                        public void onResponse(String response) {
+                            progressDialog.dismiss();
+
+                            try {
+                                //converting response to json object
+                                JSONObject obj = new JSONObject(response);
+
+                                //if no error in response
+                                if (mStatusCode == HttpURLConnection.HTTP_OK) {
+                                    Toast.makeText(getApplicationContext(), "Signed Up! Please login to continue", Toast.LENGTH_SHORT).show();
+
+                                    //storing the user in shared preferences
+                                    //SharedPrefManager.getInstance(getApplicationContext()).userLogin(obj.getString("token"));
+                                    //starting the profile activity
+                                    onSignupSuccess();
+                                    finish();
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                } else {
+                                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                                    onSignupFailed();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.e("VOLLEY",error.getMessage());
+                        }
+                    }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", requestBody, "utf-8");
+                        return null;
                     }
-                }, 3000);
+                }
+                @Override
+                protected Response<String> parseNetworkResponse(NetworkResponse response) {
+                    String responseString = "";
+                    if (response != null) {
+                        mStatusCode = response.statusCode;
+                        // can get more details such as response.headers
+                    }
+                    return super.parseNetworkResponse(response);
+                }
+            };
+
+            VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
+        }catch (Exception e){
+            Log.e("VOLLEY", e.toString());
+        }
     }
 
 
@@ -112,8 +192,8 @@ public class SignupActivity extends AppCompatActivity {
             _emailText.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters");
+        if (password.isEmpty() || password.length() < 4 || password.length() > 20) {
+            _passwordText.setError("between 4 and 20 alphanumeric characters");
             valid = false;
         } else {
             _passwordText.setError(null);
