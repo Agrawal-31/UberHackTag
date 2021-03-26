@@ -2,7 +2,9 @@ package com.uber.lastmile;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 
 import android.content.Intent;
@@ -36,12 +38,15 @@ import static com.uber.lastmile.constants.constants.LOGIN_URL;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
-    private int mStatusCode = 0;
 
-    @BindView(R.id.input_email) EditText _emailText;
-    @BindView(R.id.input_password) EditText _passwordText;
-    @BindView(R.id.btn_login) Button _loginButton;
-    @BindView(R.id.link_signup) TextView _signupLink;
+    @BindView(R.id.input_email)
+    EditText _emailText;
+    @BindView(R.id.input_password)
+    EditText _passwordText;
+    @BindView(R.id.btn_login)
+    Button _loginButton;
+    @BindView(R.id.link_signup)
+    TextView _signupLink;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,20 +109,11 @@ public class LoginActivity extends AppCompatActivity {
                                 //converting response to json object
                                 JSONObject obj = new JSONObject(response);
 
-                                //if no error in response
-                                if (mStatusCode == HttpURLConnection.HTTP_OK) {
-                                    Toast.makeText(getApplicationContext(), "Logged In!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Logged In!", Toast.LENGTH_SHORT).show();
+                                onLoginSuccess(obj.getString("token"));
+                                finish();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
 
-                                    //storing the user in shared preferences
-                                    SharedPrefManager.getInstance(getApplicationContext()).userLogin(obj.getString("token"));
-                                    //starting the profile activity
-                                    onLoginSuccess();
-                                    finish();
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                } else {
-                                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                                    onLoginFailed();
-                                }
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -126,14 +122,22 @@ public class LoginActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-                            Log.e("VOLLEY",error.getMessage());
+                            progressDialog.dismiss();
+                            try {
+                                String body = new String(error.networkResponse.data, "UTF-8");
+                                JSONObject obj = new JSONObject(body);
+                                Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            onLoginFailed();
                         }
                     }) {
                 @Override
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
                 }
+
                 @Override
                 public byte[] getBody() throws AuthFailureError {
                     try {
@@ -143,19 +147,10 @@ public class LoginActivity extends AppCompatActivity {
                         return null;
                     }
                 }
-                @Override
-                protected Response<String> parseNetworkResponse(NetworkResponse response) {
-                    String responseString = "";
-                    if (response != null) {
-                        mStatusCode = response.statusCode;
-                        // can get more details such as response.headers
-                    }
-                    return super.parseNetworkResponse(response);
-                }
             };
 
             VolleySingleton.getInstance(this).addToRequestQueue(stringRequest);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e("VOLLEY", e.toString());
         }
     }
@@ -166,10 +161,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
+                onLoginSuccess(data.getStringExtra("jwt"));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         }
     }
@@ -180,14 +173,14 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String jwt) {
+        //storing the user in shared preferences
+        SharedPrefManager.getInstance(getApplicationContext()).userLogin(jwt);
         _loginButton.setEnabled(true);
         finish();
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
         _loginButton.setEnabled(true);
     }
 
