@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
 
         List<String> stringList = new ArrayList<>(Arrays.asList(ex.getMessage()));
         return ResponseEntity
-                .status(HttpStatus.NOT_ACCEPTABLE)
+                .status(HttpStatus.CONFLICT)
                 .body(new ApiCallError<>(stringList.get(0), stringList));
     }
 
