@@ -12,9 +12,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Dash;
+import com.google.android.gms.maps.model.Dot;
+import com.google.android.gms.maps.model.Gap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PatternItem;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.uber.lastmile.constants.constants;
@@ -29,13 +32,21 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback{
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    ArrayList markerPoints= new ArrayList();
+    private static final int PATTERN_DASH_LENGTH_PX = 10;
+    private static final PatternItem DASH = new Dash(PATTERN_DASH_LENGTH_PX);
+    private static final int PATTERN_GAP_LENGTH_PX = 20;
+    private static final PatternItem DOT = new Dot();
+    private static final PatternItem GAP = new Gap(PATTERN_GAP_LENGTH_PX);
+
+    // Create a stroke pattern of a gap followed by a dash.
+    private static final List<PatternItem> PATTERN_POLYLINE_DOTTED = Arrays.asList(GAP, DASH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,98 +63,56 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
      * we just add a marker near Sydney, Australia.
-     *
+     * <p>
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        // Add polylines to the map.
-//        // Polylines are useful to show a route or some other connection between points.
-//        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
-//                .clickable(true)
-//                .add(
-//                        new LatLng(-35.016, 143.321),
-//                        new LatLng(-34.747, 145.592),
-//                        new LatLng(-34.364, 147.891),
-//                        new LatLng(-33.501, 150.217),
-//                        new LatLng(-32.306, 149.248),
-//                        new LatLng(-32.491, 147.309)));
-//
-//        // Position the map's camera near Alice Springs in the center of Australia,
-//        // and set the zoom factor so most of Australia shows on the screen.
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-23.684, 133.903), 4));
-//
-//        // Set listeners for click events.
-//        googleMap.setOnPolylineClickListener(this);
-//        googleMap.setOnPolygonClickListener(this);
-//    }
-//
-//    @Override
-//    public void onPolygonClick(Polygon polygon) {
-//
-//    }
-//
-//    @Override
-//    public void onPolylineClick(Polyline polyline) {
-//
-//    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng udaipur = new LatLng(24.5854, 73.7125);
-        //mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(udaipur, 16));
+        LatLng home = new LatLng(24.563271, 73.725107);
+        LatLng lake = new LatLng(24.594064, 73.680595);
+        LatLng source = new LatLng(24.572481, 73.724991);
+        LatLng destination = new LatLng(24.595288, 73.689162);
 
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 14));
 
-                if (markerPoints.size() > 1) {
-                    markerPoints.clear();
-                    mMap.clear();
-                }
+        MarkerOptions options = new MarkerOptions();
+        // Setting the position of the marker
+        options.position(home);
+        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+        mMap.addMarker(options);
 
-                // Adding new item to the ArrayList
-                markerPoints.add(latLng);
+        options.position(lake);
+        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        mMap.addMarker(options);
 
-                // Creating MarkerOptions
-                MarkerOptions options = new MarkerOptions();
+        options.position(source);
+        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+        mMap.addMarker(options);
 
-                // Setting the position of the marker
-                options.position(latLng);
+        options.position(destination);
+        options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        mMap.addMarker(options);
 
-                if (markerPoints.size() == 1) {
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                } else if (markerPoints.size() == 2) {
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                }
 
-                // Add new marker to the Google Map Android API V2
-                mMap.addMarker(options);
+        // Getting URL to the Google Directions API
+        String urlA = getDirectionsUrl(home, lake);
+        String urlB = getDirectionsUrl(source, destination);
 
-                // Checks, whether start and end locations are captured
-                if (markerPoints.size() >= 2) {
-                    LatLng origin = (LatLng) markerPoints.get(0);
-                    LatLng dest = (LatLng) markerPoints.get(1);
+        DownloadTaskA downloadTaskA = new DownloadTaskA();
+        DownloadTaskB downloadTaskB = new DownloadTaskB();
 
-                    // Getting URL to the Google Directions API
-                    String url = getDirectionsUrl(origin, dest);
+        // Start downloading json data from Google Directions API
+        //downloadTaskA.execute(urlA);
+        //downloadTaskB.onPostExecute(urlB);
 
-                    DownloadTask downloadTask = new DownloadTask();
-
-                    // Start downloading json data from Google Directions API
-                    downloadTask.execute(url);
-                }
-
-            }
-        });
-
+        downloadTaskA.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, urlA);
+        downloadTaskB.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, urlB);
     }
 
-    private class DownloadTask extends AsyncTask<String, Void, String> {
+    private class DownloadTaskA extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... url) {
@@ -162,7 +131,34 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
 
-            ParserTask parserTask = new ParserTask();
+            ParserTaskA parserTask = new ParserTaskA();
+
+
+            parserTask.execute(result);
+
+        }
+    }
+
+    private class DownloadTaskB extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... url) {
+
+            String data = "";
+
+            try {
+                data = downloadUrl(url[0]);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTaskB parserTask = new ParserTaskB();
 
 
             parserTask.execute(result);
@@ -174,7 +170,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     /**
      * A class to parse the Google Places in JSON format
      */
-    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+    private class ParserTaskA extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
 
         // Parsing the data in non-ui thread
         @Override
@@ -196,15 +192,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            ArrayList<LatLng> points = new ArrayList<LatLng>();;
-            PolylineOptions lineOptions = new PolylineOptions();;
-            lineOptions.width(2);
+            ArrayList<LatLng> points = new ArrayList<LatLng>();
+            PolylineOptions lineOptions = new PolylineOptions();
+            lineOptions.width(12);
             lineOptions.color(Color.RED);
             MarkerOptions markerOptions = new MarkerOptions();
 
             for (int i = 0; i < result.size(); i++) {
                 points = new ArrayList();
-                lineOptions = new PolylineOptions();
 
                 List<HashMap<String, String>> path = result.get(i);
 
@@ -219,14 +214,66 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
                 lineOptions.addAll(points);
-                lineOptions.width(12);
-                lineOptions.color(Color.RED);
                 lineOptions.geodesic(true);
 
             }
 
 // Drawing polyline in the Google Map for the i-th route
             mMap.addPolyline(lineOptions);
+        }
+    }
+
+    private class ParserTaskB extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                DirectionsJSONParser parser = new DirectionsJSONParser();
+
+                routes = parser.parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points = new ArrayList<LatLng>();
+            PolylineOptions lineOptions = new PolylineOptions();
+            lineOptions.width(12);
+            lineOptions.color(Color.BLUE);
+            MarkerOptions markerOptions = new MarkerOptions();
+
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList();
+
+                List<HashMap<String, String>> path = result.get(i);
+
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                lineOptions.addAll(points);
+                lineOptions.geodesic(true);
+
+            }
+
+// Drawing polyline in the Google Map for the i-th route
+            Polyline polyline = mMap.addPolyline(lineOptions);
+            polyline.setPattern(PATTERN_POLYLINE_DOTTED);
         }
     }
 
@@ -241,10 +288,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Sensor enabled
         String sensor = "sensor=false";
         String mode = "mode=driving";
-        String key = "key="+getResources().getString(R.string.google_maps_key);
+        String key = "key=" + getResources().getString(R.string.google_maps_key);
 
         String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
-        parameters +=   "&" + key;
+        parameters += "&" + key;
 
         String url = constants.MAPS_API_URL + constants.MAPS_API_FORMAT + "?" + parameters;
 
