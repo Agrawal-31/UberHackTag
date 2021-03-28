@@ -26,7 +26,7 @@ public class Package {
     private String deliveryLocationId;
     private String hubLocation;
     private String deliveryLocation;
-    private Date expectedDeliveryDate;
+    private String expectedDeliveryDate;
     
 
     @Override
