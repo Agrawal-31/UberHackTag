@@ -6,6 +6,8 @@ import LoginForm from "./components/LoginForm/LoginForm";
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 import PrivateRoute from "./utils/privateroute";
 import Home from "./components/Home/Home";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import ViewPackage from "./components/Home/Packages";
 
 function App() {
   const [title, updateTitle] = useState(null);
@@ -37,6 +39,9 @@ function App() {
             <PrivateRoute path="/home">
               <Home />
             </PrivateRoute>
+            <Route path ="/packages">
+              <ViewPackage/>
+            </Route>
           </Switch>
         </div>
       </div>
