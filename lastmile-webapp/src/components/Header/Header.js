@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { ACCESS_TOKEN_NAME } from "../../constants/apiConstants";
+import {Button, Navbar} from "react-bootstrap";
 
 function Header(props) {
   const capitalize = (s) => {
@@ -14,12 +15,12 @@ function Header(props) {
     title = "Welcome";
   }
   function renderLogout() {
-    if (props.location.pathname === "/home") {
+    if (props.location.pathname === "/home" || props.location.pathname === "/packages") {
       return (
-        <div className="ml-auto">
-          <button className="btn btn-danger" onClick={() => handleLogout()}>
+        <div className="ml-3">
+          <Button variant = "danger" onClick={() => handleLogout()}>
             Logout
-          </button>
+          </Button>
         </div>
       );
     }
@@ -28,13 +29,29 @@ function Header(props) {
     localStorage.removeItem(ACCESS_TOKEN_NAME);
     props.history.push("/login");
   }
+  function handleViewPackages(){
+    props.history.push("/packages");
+  }
+  function renderViewPackages() {
+    if (props.location.pathname === "/home") {
+      return (
+          <div className="ml-auto">
+            <Button variant="secondary" onClick = {() =>handleViewPackages()}>
+              View Packages
+
+            </Button>
+          </div>
+      );
+    }
+  }
   return (
-    <nav className="navbar navbar-dark bg-primary">
-      <div className="row col-12 d-flex justify-content-center text-white">
-        <span className="h3">{props.title || title}</span>
-        {renderLogout()}
-      </div>
-    </nav>
+  <Navbar bg="dark" variant="dark">
+    <Navbar.Brand href="#home">
+      Uber Freight
+    </Navbar.Brand>
+    {renderViewPackages()}
+    {renderLogout()}
+  </Navbar>
   );
 }
 export default withRouter(Header);
