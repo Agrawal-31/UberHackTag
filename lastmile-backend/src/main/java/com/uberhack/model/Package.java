@@ -1,5 +1,7 @@
 package com.uberhack.model;
 
+import java.sql.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,7 +26,7 @@ public class Package {
     private String deliveryLocationId;
     private String hubLocation;
     private String deliveryLocation;
-    
+    private Date expectedDeliveryDate;
     
 
     @Override
