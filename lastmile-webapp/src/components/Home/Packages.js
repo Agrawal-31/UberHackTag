@@ -2,42 +2,52 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {API_BASE_URL,ACCESS_TOKEN_NAME} from "../../constants/apiConstants";
 import {Card, Alert, Row, Col, Badge, Container} from "react-bootstrap"
+import setDefaultAxios from "../../utils/setDefaultAxios";
 export default function ViewPackage() {
+    const [packages, setPackages] = useState(null);
 
+    function updatePackages() {
+        axios.get(
+            API_BASE_URL + "/packages/"
+        )
+            .then(function (response) {
+                const data = response.data;
+                if(data.error || data.errors){
+                    console.log(data);
+                }
+                setPackages(data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
+    }
 
-    const packageList = [
-        {
-            "packageId": 19,
-            "packageValue": "5000",
-            "hubLocationId": "13",
-            "deliveryLocationId": "42",
-            "hubLocation": "Gaya",
-            "deliveryLocation": "Patna"
-        },
-        {
-            "packageId": 20,
-            "packageValue": "5000",
-            "hubLocationId": "13",
-            "deliveryLocationId": "42",
-            "hubLocation": "Gaya",
-            "deliveryLocation": "Patna"
-        }
-    ]
+    async function checkUser() {
+        try {
+            setDefaultAxios(localStorage.getItem(ACCESS_TOKEN_NAME));
+        } catch (err) {}
+    }
+
+    useEffect(() => {
+        checkUser().then(() => updatePackages());
+    }, []);
 
     const RenderPackageList = () =>{
-    if(!packageList){
+    if(!packages){
         return <h1>Loading</h1>
     }
 
         const p = [];
-            console.log(packageList.length)
-        if (packageList.length === 0) {
+        if (packages.length === 0) {
 
             p.push(<Alert variant="primary">No Packages yet.</Alert>);
             return p;
         }
 
-        packageList.forEach((id) =>{
+        packages.forEach((id) =>{
             p.push(
                 <>
                     <Card body className="p-1 mt-4 align-items-center justify-content-center"  key = {id.packageId}>
