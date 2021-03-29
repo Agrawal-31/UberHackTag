@@ -3,6 +3,7 @@ import axios from "axios";
 import {API_BASE_URL,ACCESS_TOKEN_NAME} from "../../constants/apiConstants";
 import {Card, Alert, Row, Col, Badge, Container} from "react-bootstrap"
 import setDefaultAxios from "../../utils/setDefaultAxios";
+import Loading from "../Loading/Loading";
 export default function ViewPackage() {
     const [packages, setPackages] = useState(null);
 
@@ -37,7 +38,7 @@ export default function ViewPackage() {
 
     const RenderPackageList = () =>{
     if(!packages){
-        return <h1>Loading</h1>
+        return <Loading/>
     }
 
         const p = [];
@@ -81,7 +82,7 @@ export default function ViewPackage() {
 
             <Container className= "align-items-center justify-content-center" >
 
-                <h2 className="text-center mt-4">View Packages</h2>
+                <h2 className="text-center mt-5 mb-5">View Packages</h2>
                 {RenderPackageList()}
             </Container>
             </div>
