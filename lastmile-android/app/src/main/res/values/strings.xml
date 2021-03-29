@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LastMile</string>
+    <string name="app_name">UBER Freights</string>
     <string name="title_activity_signup">SignupActivity</string>
     <!--
     This string is used for square devices and overridden by hello_world in

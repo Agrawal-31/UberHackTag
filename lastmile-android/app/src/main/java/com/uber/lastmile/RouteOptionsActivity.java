@@ -15,7 +15,6 @@ import com.google.gson.reflect.TypeToken;
 import com.uber.lastmile.adapters.RouteAdapter;
 import com.uber.lastmile.models.RouteOption;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -44,7 +43,10 @@ public class RouteOptionsActivity extends AppCompatActivity implements AdapterVi
         setContentView(R.layout.activity_route_options);
 
         Gson gson = new Gson();
-        routeOptionList = gson.fromJson(getIntent().getStringExtra("data"), new TypeToken<List<RouteOption>>(){}.getType());
+        routeOptionList = gson.fromJson(getIntent().getStringExtra("data"), new TypeToken<List<RouteOption>>() {
+        }.getType());
+
+        String riderData = getIntent().getStringExtra("rider-data");
 
         listView = findViewById(R.id.list_view);
         ArrayAdapter<RouteOption> adapter = new RouteAdapter(this, routeOptionList);
@@ -53,7 +55,10 @@ public class RouteOptionsActivity extends AppCompatActivity implements AdapterVi
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String myJson = gson.toJson(routeOptionList.get(position));
                 Intent intent = new Intent(view.getContext(), MapsActivity.class);
+                intent.putExtra("data", myJson);
+                intent.putExtra("rider-data", riderData);
                 startActivity(intent);
             }
         });
