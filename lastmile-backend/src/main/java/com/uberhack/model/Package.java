@@ -26,6 +26,7 @@ public class Package {
     private String deliveryLocation;
     private String expectedDeliveryDate;
     private String externalPackageId;
+
     
     
 
