@@ -15,11 +15,10 @@ export default function Home() {
   const [hubLocation, setHubLocation] = useState(null);
   const packageAmountRef = useRef(0);
 
-  const [packages, SetPackages] = useState();
+  const [packages, SetPackages] = useState(null);
 
   function updatePackages() {
-    axios
-      .get(
+      axios.get(
         API_BASE_URL + "/packages/"
       )
       .then(function (response) {
