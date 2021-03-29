@@ -20,9 +20,13 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.gson.Gson;
+import com.uber.lastmile.models.RouteOption;
 import com.uber.lastmile.utils.SharedPrefManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -86,9 +90,18 @@ public class MainActivity extends AppCompatActivity {
 
         Button letsGoButton = (Button) this.findViewById(R.id.button);
         letsGoButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                List<RouteOption> routeOptionList = new ArrayList<>();
+                routeOptionList.add(new RouteOption(1, "Fateh Sagar Lake", "Pichola Lake", 15, 500));
+                routeOptionList.add(new RouteOption(2, "Radison BLU", "Sankalp Restaurant", 20, 400));
+                routeOptionList.add(new RouteOption(3, "NV Sports", "YMCA Pool", 63, 3700));
+
+                Gson gson = new Gson();
+                String myJson = gson.toJson(routeOptionList);
                 Intent intent = new Intent(v.getContext(), RouteOptionsActivity.class);
+                intent.putExtra("data", myJson);
                 startActivity(intent);
             }
         });

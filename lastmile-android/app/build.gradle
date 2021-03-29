@@ -39,6 +39,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     // For loading and tinting drawables on older versions of the platform
     implementation "androidx.appcompat:appcompat-resources:$appcompat_version"
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.jakewharton:butterknife:10.2.3'
     implementation 'com.android.volley:volley:1.2.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
