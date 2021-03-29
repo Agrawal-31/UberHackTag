@@ -18,8 +18,8 @@ function Header(props) {
     if (props.location.pathname === "/home" || props.location.pathname === "/packages") {
       return (
         <div className="ml-3">
-          <Button variant = "danger" onClick={() => handleLogout()}>
-            Logout
+          <Button  style={{width : '150px'}} variant = "danger" onClick={() => handleLogout()}>
+            <h5>Logout</h5>
           </Button>
         </div>
       );
@@ -36,8 +36,8 @@ function Header(props) {
     if (props.location.pathname === "/home") {
       return (
           <div className="ml-auto">
-            <Button variant="secondary" onClick = {() =>handleViewPackages()}>
-              View Packages
+            <Button style={{width : '170px'}} variant="secondary" onClick = {() =>handleViewPackages()}>
+              <h5> View Packages</h5>
 
             </Button>
           </div>
@@ -47,7 +47,7 @@ function Header(props) {
   return (
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand href="#home">
-      Uber Freight
+      <h3>Uber Freights</h3>
     </Navbar.Brand>
     {renderViewPackages()}
     {renderLogout()}
