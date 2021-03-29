@@ -26,7 +26,10 @@ public class Package {
     private String deliveryLocation;
     private String expectedDeliveryDate;
     private String externalPackageId;
-
+    private String hubLattitude;
+    private String DeliveryLattitude;
+    private String hubLongitude;
+    private String DeliveryLongitude;
     
     
 
