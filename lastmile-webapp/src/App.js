@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-
+import "./App.css"
 import Header from "./components/Header/Header";
 import LoginForm from "./components/LoginForm/LoginForm";
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
@@ -13,8 +13,11 @@ function App() {
   const [title, updateTitle] = useState(null);
   const [errorMessage, updateErrorMessage] = useState(null);
   return (
+      <div>
+
+
     <Router>
-      <div className="App">
+      <div className="App" >
         <Header title={title} />
         <div className="container d-flex align-items-center flex-column">
           <Switch>
@@ -46,6 +49,7 @@ function App() {
         </div>
       </div>
     </Router>
+      </div>
   );
 }
 

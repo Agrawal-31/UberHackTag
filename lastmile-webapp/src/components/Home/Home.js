@@ -7,30 +7,18 @@ import {
   GOOGLE_MAP_API_KEY,
 } from "../../constants/apiConstants";
 import Autocomplete from "react-google-autocomplete";
-import { Card, Form, InputGroup, Button, FormControl } from "react-bootstrap";
+import { Row,Col,Card, Form, InputGroup, Button, FormControl ,Alert} from "react-bootstrap";
 import Geosuggest from "react-geosuggest";
 import setDefaultAxios from "../../utils/setDefaultAxios";
 export default function Home() {
   const [deliveryLocation, setDeliveryLocation] = useState(null);
   const [hubLocation, setHubLocation] = useState(null);
-  const packageAmountRef = useRef(0);
-
+  const packageIdRef = useRef("");
+  const packageValueRef = useRef("");
+  const dateRef = useRef("");
   const [packages, SetPackages] = useState(null);
-
-  function updatePackages() {
-      axios.get(
-        API_BASE_URL + "/packages/"
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
-  }
+ const [loading,setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function checkUser() {
     try {
@@ -39,26 +27,29 @@ export default function Home() {
   }
 
   useEffect(() => {
-    checkUser().then(() => updatePackages());
+
   }, []);
   return (
+
     <div>
-      <Geosuggest />
+      {/*<Geosuggest />*/}
       {/*<h1>Add Packages</h1>*/}
-      <h2>{packages}</h2>
-      <Card className="mt-5">
+
+      <Card className="mt-5" bg ="secondary" text = "white">
+
         <Card.Header>
-          <h1>Add Package</h1>
+          <h1 className="text-center">Add Package</h1>
         </Card.Header>
+        {error && <Alert className = "text-center" variant="danger">{error}</Alert>}
         <Card.Body>
           <Form>
-            <InputGroup className="mt-4 mb-4" size="lg">
+            <InputGroup  className="mt-4 mb-4" size="lg">
               <InputGroup.Prepend>
-                <InputGroup.Text style={{ width: "180px" }} id="package_id">
+                <InputGroup.Text  style={{ width: "180px" }} id="package_id">
                   Package ID
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl></FormControl>
+              <FormControl  type = "text" ref = {packageIdRef} required/>
             </InputGroup>
 
             <div id="deliveryLocation">
@@ -103,7 +94,7 @@ export default function Home() {
                   Package Value
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <Form.Control as="select">
+              <Form.Control as="select" ref = {packageValueRef} required >
                 <option>Low</option>
                 <option>Medium</option>
                 <option>High</option>
@@ -116,12 +107,13 @@ export default function Home() {
                   Expected Date
                 </InputGroup.Text>
               </InputGroup.Prepend>
-              <FormControl type="datetime-local"></FormControl>
+              <FormControl type="datetime-local" ref = {dateRef} required/>
             </InputGroup>
+            <Button disabled={loading} size="lg" className="w-100" variant="dark" type="submit">
+              Submit
+            </Button>
           </Form>
-          <Button variant="secondary" type="submit">
-            Submit
-          </Button>
+
         </Card.Body>
       </Card>
     </div>
