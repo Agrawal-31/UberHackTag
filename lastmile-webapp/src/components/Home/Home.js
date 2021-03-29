@@ -7,9 +7,10 @@ import {
   GOOGLE_MAP_API_KEY,
 } from "../../constants/apiConstants";
 import Autocomplete from "react-google-autocomplete";
-import { Row,Col,Card, Form, InputGroup, Button, FormControl ,Alert} from "react-bootstrap";
+import { Image,Row,Col,Card, Form, InputGroup, Button, FormControl ,Alert} from "react-bootstrap";
 import Geosuggest from "react-geosuggest";
 import setDefaultAxios from "../../utils/setDefaultAxios";
+import banner from "../../banner.png"
 export default function Home() {
   const [deliveryLocation, setDeliveryLocation] = useState(null);
   const [hubLocation, setHubLocation] = useState(null);
@@ -34,7 +35,12 @@ export default function Home() {
     <div>
       {/*<Geosuggest />*/}
       {/*<h1>Add Packages</h1>*/}
+  <Row>
 
+  <Col>
+    <Image className = "al" src ={banner} fluid></Image>
+  </Col>
+    <Col>
       <Card className="mt-5" bg ="secondary" text = "white">
 
         <Card.Header>
@@ -116,6 +122,8 @@ export default function Home() {
 
         </Card.Body>
       </Card>
+    </Col>
+  </Row>
     </div>
   );
 }
