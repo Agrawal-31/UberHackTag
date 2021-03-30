@@ -32,8 +32,11 @@ function Header(props) {
   function handleViewPackages(){
     props.history.push("/packages");
   }
+  function handleAddPackages(){
+    props.history.push("/home");
+  }
   function renderViewPackages() {
-    if (props.location.pathname === "/home") {
+    if (props.location.pathname === "/home" ) {
       return (
           <div className="ml-auto">
             <Button style={{width : '170px'}} variant="secondary" onClick = {() =>handleViewPackages()}>
@@ -44,13 +47,28 @@ function Header(props) {
       );
     }
   }
+  function renderAddPackages() {
+    if (props.location.pathname === "/packages" ) {
+      return (
+          <div className="ml-auto">
+            <Button style={{width : '170px'}} variant="secondary" onClick = {() =>handleAddPackages()}>
+              <h5> Add Packages</h5>
+
+            </Button>
+          </div>
+      );
+    }
+  }
+
   return (
   <Navbar bg="dark" variant="dark">
     <Navbar.Brand href="#home">
       <h3>Uber Freights</h3>
     </Navbar.Brand>
+    {renderAddPackages()}
     {renderViewPackages()}
     {renderLogout()}
+
   </Navbar>
   );
 }

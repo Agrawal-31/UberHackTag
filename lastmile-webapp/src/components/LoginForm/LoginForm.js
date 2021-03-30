@@ -3,7 +3,8 @@ import axios from "axios";
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from "../../constants/apiConstants";
 import { withRouter } from "react-router-dom";
 import AlertComponent from "../AlertComponent/AlertComponent";
-
+import {Button, Card, Row, Col, Form, Image} from "react-bootstrap";
+import banner from "../../banner.png"
 function LoginForm(props) {
   const [state, setState] = useState({
     email: "",
@@ -56,31 +57,45 @@ function LoginForm(props) {
     props.updateTitle("Register");
   };
   return (
-    <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+
+<div>
+  <Row>
+    <Col>
+      <Image className = "al" src ={banner} fluid></Image>
+    </Col>
+
+      <Col>
+
+
+
+      <Card className="w-100 mt-5" bg ="secondary" text = "white">
+    <Card.Body>
+
+
+
       {state.errorMessage && (
         <AlertComponent
           errorMessage={state.errorMessage}
           hideError={hideError}
         />
       )}
-      <form>
+
+      <Form>
+        <h2 className="text-center mt-5 mb-5">Login</h2>
         <div className="form-group text-left">
-          <label htmlFor="exampleInputEmail1">Username</label>
+          <label htmlFor="exampleInputEmail1"><h5>Username</h5></label>
           <input
             type="email"
             className="form-control"
             id="email"
             aria-describedby="emailHelp"
-            placeholder="Username"
+            placeholder="Email"
             value={state.email}
             onChange={handleChange}
           />
-          <small id="emailHelp" className="form-text text-muted">
-            We'll never share your email with anyone else.
-          </small>
         </div>
         <div className="form-group text-left">
-          <label htmlFor="exampleInputPassword1">Password</label>
+          <label htmlFor="exampleInputPassword1"><h5>Password</h5></label>
           <input
             type="password"
             className="form-control"
@@ -91,14 +106,10 @@ function LoginForm(props) {
           />
         </div>
         <div className="form-check"></div>
-        <button
-          type="submit"
-          className="btn btn-primary"
-          onClick={handleSubmitClick}
-        >
-          Submit
-        </button>
-      </form>
+        <Button  size="lg" className="w-100" variant="dark" type = "submit" onClick={handleSubmitClick}>
+          Login
+        </Button>
+      </Form>
       <div
         className="alert alert-success mt-2"
         style={{ display: state.successMessage ? "block" : "none" }}
@@ -106,13 +117,18 @@ function LoginForm(props) {
       >
         {state.successMessage}
       </div>
-      <div className="registerMessage">
+      <div className="mt-4 registerMessage">
+        <h6>
         <span>Dont have an account? </span>
-        <span className="loginText" onClick={() => redirectToRegister()}>
-          Register
+        <span className="loginText" onClick={() => redirectToRegister()}>Register
         </span>
+        </h6>
       </div>
-    </div>
+    </Card.Body>
+      </Card>
+      </Col>
+  </Row>
+</div>
   );
 }
 

@@ -3,6 +3,8 @@ import axios from "axios";
 import { API_BASE_URL, ACCESS_TOKEN_NAME } from "../../constants/apiConstants";
 import { withRouter } from "react-router-dom";
 import AlertComponent from "../AlertComponent/AlertComponent";
+import banner from "../../banner.png"
+import {Card, Col, Image, Row, Form, Button} from "react-bootstrap";
 
 function RegistrationForm(props) {
   const [state, setState] = useState({
@@ -73,16 +75,29 @@ function RegistrationForm(props) {
     }
   };
   return (
-    <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
-      {state.errorMessage && (
+    <div>
+      <Row>
+        <Col>
+          <Image className = "al" src ={banner} fluid></Image>
+        </Col>
+
+        <Col>
+
+
+
+          <Card className="w-100 mt-5" bg ="secondary" text = "white">
+            <Card.Body>
+
+            {state.errorMessage && (
         <AlertComponent
           errorMessage={state.errorMessage}
           hideError={hideError}
         />
       )}
-      <form>
+      <Form>
+        <h2 className="text-center mt-5 mb-5">Register</h2>
         <div className="form-group text-left">
-          <label htmlFor="exampleInputEmail1">Username</label>
+          <label htmlFor="exampleInputEmail1"><h5>Username</h5></label>
           <input
             type="email"
             className="form-control"
@@ -97,7 +112,7 @@ function RegistrationForm(props) {
           </small>
         </div>
         <div className="form-group text-left">
-          <label htmlFor="exampleInputPassword1">Password</label>
+          <label htmlFor="exampleInputPassword1"><h5>Password</h5></label>
           <input
             type="password"
             className="form-control"
@@ -108,7 +123,7 @@ function RegistrationForm(props) {
           />
         </div>
         <div className="form-group text-left">
-          <label htmlFor="exampleInputPassword1">Confirm Password</label>
+          <label htmlFor="exampleInputPassword1"><h5>Confirm Password</h5></label>
           <input
             type="password"
             className="form-control"
@@ -118,14 +133,13 @@ function RegistrationForm(props) {
             onChange={handleChange}
           />
         </div>
-        <button
-          type="submit"
-          className="btn btn-primary"
+        <Button
+            size="lg" className="w-100" variant="dark" type = "submit"
           onClick={handleSubmitClick}
         >
           Register
-        </button>
-      </form>
+        </Button>
+      </Form>
       <div
         className="alert alert-success mt-2"
         style={{ display: state.successMessage ? "block" : "none" }}
@@ -139,6 +153,10 @@ function RegistrationForm(props) {
           Login here
         </span>
       </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }

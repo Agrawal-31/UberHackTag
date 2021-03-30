@@ -1,14 +1,12 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {  useState, useRef } from "react";
 import axios from "axios";
 
 import {
   API_BASE_URL,
   ACCESS_TOKEN_NAME,
-  GOOGLE_MAP_API_KEY,
 } from "../../constants/apiConstants";
 import Autocomplete from "react-google-autocomplete";
-import {Tabs, Image,Row,Col,Card, Form, InputGroup, Button, FormControl ,Alert} from "react-bootstrap";
-import Geosuggest from "react-geosuggest";
+import {Image,Row,Col,Card, Form, InputGroup, Button, FormControl ,Alert} from "react-bootstrap";
 import setDefaultAxios from "../../utils/setDefaultAxios";
 import banner from "../../banner.png"
 export default function Home() {
@@ -17,8 +15,6 @@ export default function Home() {
   const packageIdRef = useRef();
   const packageValueRef = useRef();
   const dateRef = useRef("");
-  const [packages, SetPackages] = useState(null);
- const [loading,setLoading] = useState(false);
   const [error, setError] = useState("");
 
   async function checkUser() {
@@ -27,15 +23,15 @@ export default function Home() {
     } catch (err) {}
   }
 
-  useEffect(() => {
-
-  }, []);
 
   function addPackage(){
+
       if(!deliveryLocation){
           setError("Enter Delivery Location");
           return;
       }
+
+
       if(!hubLocation){
           setError("Enter Hub Location");
           return;
@@ -52,7 +48,6 @@ export default function Home() {
       const hubLocationAddress = hubLocation.formatted_address;
       const deliveryLocationID = deliveryLocation.place_id;
       const hubLocationID = hubLocation.place_id;
-    console.log(deliveryLocationID)
 
       const payload = {
           packageValue:packageValue,
@@ -64,6 +59,7 @@ export default function Home() {
           expectedDeliveryDate:expectedDeliverydate
 
       };
+
 
       axios.post(
           API_BASE_URL + "/packages/",payload
@@ -119,6 +115,8 @@ export default function Home() {
                         setDeliveryLocation(place);
                       }}
                       componentRestrictions={{ country: "in" }}
+                      types={['establishment']}
+                      fields = {[]}
                   />
                 </InputGroup>
               </div>
@@ -135,6 +133,9 @@ export default function Home() {
                       onPlaceSelected={(place) => {
                         setHubLocation(place);
                       }}
+                      componentRestrictions={{ country: "in" }}
+                      types={['establishment']}
+                      fields = {[]}
                   />
                 </InputGroup>
               </div>
@@ -174,8 +175,6 @@ export default function Home() {
   return (
 
     <div>
-      {/*<Geosuggest />*/}
-      {/*<h1>Add Packages</h1>*/}
   <Row>
   <Col>
     <Image className = "al" src ={banner} fluid></Image>
