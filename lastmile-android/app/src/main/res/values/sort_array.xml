@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="sort_array">
+        <item>Sort</item>
+        <item>Reward</item>
+        <item>Est. Time</item>
+    </string-array>
+</resources>
