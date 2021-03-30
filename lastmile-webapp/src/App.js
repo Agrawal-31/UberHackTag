@@ -1,53 +1,53 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import "./App.css"
+import "./App.css";
 import Header from "./components/Header/Header";
 import LoginForm from "./components/LoginForm/LoginForm";
 import RegistrationForm from "./components/RegistrationForm/RegistrationForm";
 import PrivateRoute from "./utils/privateroute";
 import Home from "./components/Home/Home";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import ViewPackage from "./components/Home/Packages";
 
 function App() {
   const [title, updateTitle] = useState(null);
   const [errorMessage, updateErrorMessage] = useState(null);
   return (
-      <div>
-    <Router>
-      <div className="App" >
-        <Header title={title} />
-        <div className="container d-flex align-items-center flex-column">
-          <Switch>
-            <Route path="/" exact={true}>
-              <RegistrationForm
-                showError={updateErrorMessage}
-                updateTitle={updateTitle}
-              />
-            </Route>
-            <Route path="/register">
-              <RegistrationForm
-                showError={updateErrorMessage}
-                updateTitle={updateTitle}
-              />
-            </Route>
-            <Route path="/login">
-              <LoginForm
-                showError={updateErrorMessage}
-                updateTitle={updateTitle}
-              />
-            </Route>
-            <PrivateRoute path="/home">
-              <Home />
-            </PrivateRoute>
-            <PrivateRoute path ="/packages">
-              <ViewPackage/>
-            </PrivateRoute>
-          </Switch>
+    <div>
+      <Router>
+        <div className="App">
+          <Header title={title} />
+          <div className="container d-flex align-items-center flex-column">
+            <Switch>
+              <Route path="/" exact={true}>
+                <RegistrationForm
+                  showError={updateErrorMessage}
+                  updateTitle={updateTitle}
+                />
+              </Route>
+              <Route path="/register">
+                <RegistrationForm
+                  showError={updateErrorMessage}
+                  updateTitle={updateTitle}
+                />
+              </Route>
+              <Route path="/login">
+                <LoginForm
+                  showError={updateErrorMessage}
+                  updateTitle={updateTitle}
+                />
+              </Route>
+              <PrivateRoute path="/home">
+                <Home />
+              </PrivateRoute>
+              <PrivateRoute path="/packages">
+                <ViewPackage />
+              </PrivateRoute>
+            </Switch>
+          </div>
         </div>
-      </div>
-    </Router>
-      </div>
+      </Router>
+    </div>
   );
 }
 

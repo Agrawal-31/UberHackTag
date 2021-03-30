@@ -23,17 +23,8 @@ public class DAOPackage {
     private String expectedDeliveryDate;
     private String externalPackageId;
     private String hubLattitude;
-    private String DeliveryLattitude;
+    private String deliveryLattitude;
     private String hubLongitude;
-    private String DeliveryLongitude;
-    
-    
-
-//    @Override
-//    public String toString() {
-//        return String.format("%s(packageId=%d, hubLocationId=%s, deliveryLocationId=%s, hubLocation=%s, deliveryLocation=%s, packageValue=%s)",
-//                this.getClass().getSimpleName(),
-//                this.getPackageId(), this.getHubLocationId(), this.getDeliveryLocationId(), this.getHubLocation(), this.getDeliveryLocation(), this.getPackageValue());
-//    }
+    private String deliveryLongitude;
     
 }
