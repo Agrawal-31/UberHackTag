@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {API_BASE_URL,ACCESS_TOKEN_NAME} from "../../constants/apiConstants";
-import {Card, Alert, Row, Col, Badge, Container} from "react-bootstrap"
+import {Card, Alert, Row, Col, Container} from "react-bootstrap"
 import setDefaultAxios from "../../utils/setDefaultAxios";
 import Loading from "../Loading/Loading";
 export default function ViewPackage() {
@@ -51,7 +51,7 @@ export default function ViewPackage() {
         packages.forEach((id) =>{
             p.push(
                 <>
-                    <Card body className="p-1 mt-4 align-items-center justify-content-center"  key = {id.packageId}>
+                    <Card bg ="secondary" text = "white" body className="p-1 mt-4 align-items-center justify-content-center"  key = {id.packageId}>
                         <Row>
                             <Col md="auto">
                                <h4 > Package Number {id.packageId}</h4>
@@ -82,7 +82,7 @@ export default function ViewPackage() {
 
             <Container className= "align-items-center justify-content-center" >
 
-                <h2 className="text-center mt-5 mb-5">View Packages</h2>
+                <h2 style={{color:'white'}} className="text-center mt-5 mb-5">View Packages</h2>
                 {RenderPackageList()}
             </Container>
             </div>

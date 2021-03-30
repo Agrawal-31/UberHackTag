@@ -14,8 +14,6 @@ function App() {
   const [errorMessage, updateErrorMessage] = useState(null);
   return (
       <div>
-
-
     <Router>
       <div className="App" >
         <Header title={title} />
@@ -42,9 +40,9 @@ function App() {
             <PrivateRoute path="/home">
               <Home />
             </PrivateRoute>
-            <Route path ="/packages">
+            <PrivateRoute path ="/packages">
               <ViewPackage/>
-            </Route>
+            </PrivateRoute>
           </Switch>
         </div>
       </div>
