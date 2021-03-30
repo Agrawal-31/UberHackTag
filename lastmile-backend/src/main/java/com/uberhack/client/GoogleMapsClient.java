@@ -13,7 +13,6 @@ import java.net.URI;
 public class GoogleMapsClient {
 
     public static RouteOptionResponse rewardsAndTimeFiller(RouteOptionResponse routeOptionResponse){
-        //https://maps.googleapis.com/maps/api/distancematrix/json?origins=24.577125,73.6698308&destinations=24.5580508,73.7190995&key=AIzaSyByiYCCv3LQBDtCc_5qBEX-fNBDE6dEz0g
         String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="
                 + routeOptionResponse.getPackageSourceX() + "," + routeOptionResponse.getPackageSourceY()
                 + "&destinations=" + routeOptionResponse.getPackageDestinationX() + "," + routeOptionResponse.getPackageDestinationY()
@@ -28,7 +27,7 @@ public class GoogleMapsClient {
             JsonNode row = rows.get(0);
             JsonNode elements = row.get("elements");
             JsonNode element = elements.get(0);
-            int reward = (int) Math.round(element.get("distance").get("value").asInt() * 0.007);
+            int reward = (int) Math.round(element.get("distance").get("value").asInt() * Constants.REWARD_PER_METER);
             int duration = element.get("duration").get("value").asInt();
             routeOptionResponse.setDuration(duration);
             routeOptionResponse.setReward(reward);
