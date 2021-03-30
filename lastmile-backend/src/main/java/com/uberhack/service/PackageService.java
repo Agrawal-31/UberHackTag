@@ -36,7 +36,6 @@ public class PackageService {
 
     public List<RouteOptionResponse> getPackageRoutesWithProximity(RouteRequest routeRequest){
         List<DAOPackage> daoPackageList = packageRepository.findAll();
-        DAOPackage daoPackagetmp = packageRepository.findByPackageId(1l);
         double riderSourceX = routeRequest.getRiderSourceX();
         double riderSourceY = routeRequest.getRiderSourceY();
 
