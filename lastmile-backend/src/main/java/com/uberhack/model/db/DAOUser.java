@@ -1,4 +1,4 @@
-package com.uberhack.model;
+package com.uberhack.model.db;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

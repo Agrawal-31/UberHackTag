@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uberhack.dao.UserDao;
-import com.uberhack.model.DAOUser;
+import com.uberhack.model.db.DAOUser;
 import com.uberhack.model.UserDTO;
 
 @Service
