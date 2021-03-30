@@ -1,4 +1,4 @@
-package com.uberhack.model;
+package com.uberhack.model.requests;
 
 import java.io.Serializable;
 

@@ -2,7 +2,7 @@ package com.uberhack.controller;
 
 import java.util.List;
 
-import com.uberhack.model.Package;
+import com.uberhack.model.db.DAOPackage;
 import com.uberhack.service.PackageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +18,20 @@ public class PackageController {
     private PackageService packageService;
 
     @PostMapping("/")
-    public Package savePackage(@RequestBody Package package1) {
+    public DAOPackage savePackage(@RequestBody DAOPackage DAOPackage1) {
         System.out.println("Inside the controller savePackage");
-        System.out.println(package1.toString());
-        return packageService.savePackage(package1);
+        System.out.println(DAOPackage1.toString());
+        return packageService.savePackage(DAOPackage1);
     }
 
     @GetMapping("/{id}")
-    public Package getPackageById(@PathVariable("id") Long packageId) {
+    public DAOPackage getPackageById(@PathVariable("id") Long packageId) {
         System.out.println("Inside the controller getPackageById"); 
         return packageService.getPackageById(packageId);
     }
 
     @GetMapping("/")
-    public List<Package> getAllPackages() {
+    public List<DAOPackage> getAllPackages() {
         System.out.println("Inside the controller getAllPackages"); 
         return packageService.getAllPackage();
     }

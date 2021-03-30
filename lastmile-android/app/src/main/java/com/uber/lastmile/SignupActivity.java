@@ -3,9 +3,6 @@ package com.uber.lastmile;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,26 +10,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
-import com.uber.lastmile.utils.SharedPrefManager;
 import com.uber.lastmile.utils.VolleySingleton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.uber.lastmile.constants.constants.LOGIN_URL;
 import static com.uber.lastmile.constants.constants.SIGNUP_URL;
 
 public class SignupActivity extends AppCompatActivity {
