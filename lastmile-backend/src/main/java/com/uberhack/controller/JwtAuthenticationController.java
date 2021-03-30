@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,8 +15,8 @@ import com.uberhack.service.JwtUserDetailsService;
 
 
 import com.uberhack.config.JwtTokenUtil;
-import com.uberhack.model.JwtRequest;
-import com.uberhack.model.JwtResponse;
+import com.uberhack.model.requests.JwtRequest;
+import com.uberhack.model.responses.JwtResponse;
 import com.uberhack.model.UserDTO;
 
 @RestController

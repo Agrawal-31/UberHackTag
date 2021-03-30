@@ -9,7 +9,7 @@ public class RouteOption {
     Double packageSourceX;
     Double packageSourceY;
     Double packageDestinationX;
-    Double PackageDestinationY;
+    Double packageDestinationY;
 
     public RouteOption(Integer id, String from, String to, Integer reward, Integer duration) {
         this.id = id;
@@ -32,7 +32,7 @@ public class RouteOption {
     }
 
     public Double getPackageDestinationY() {
-        return PackageDestinationY;
+        return packageDestinationY;
     }
 
     public String getFrom() {
